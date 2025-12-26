@@ -1,0 +1,86 @@
+# BLACKICE
+# Neuro-symbolic software factory for greenfield + brownfield generation
+
+[project]
+name = "blackice"
+version = "0.1.0"
+description = "Git-native software factory with MCP, agents, and neuro-symbolic validation"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+keywords = ["ai", "code-generation", "mcp", "agents", "neuro-symbolic", "brownfield", "greenfield"]
+
+dependencies = [
+    "pydantic>=2.0",
+    "pyyaml>=6.0",
+    "httpx>=0.24",
+    "rich>=13.0",
+    "typer>=0.9",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov",
+    "pytest-asyncio",
+    "mypy",
+    "ruff",
+]
+inference = [
+    "vllm>=0.4.0",
+    "torch>=2.0",
+]
+solvers = [
+    "ortools>=9.0",
+]
+extraction = [
+    "tree-sitter>=0.21",
+    "tree-sitter-python>=0.21",
+    "tree-sitter-javascript>=0.21",
+    "tree-sitter-typescript>=0.21",
+]
+mcp = [
+    "mcp>=1.0",
+]
+all = [
+    "blackice[dev,inference,solvers,extraction,mcp]",
+]
+
+[project.scripts]
+blackice = "blackice.cli:app"
+ice = "blackice.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["packages"]
+
+[tool.hatch.envs.default]
+features = ["dev"]
+
+[tool.hatch.envs.default.scripts]
+test = "pytest {args:tests}"
+test-cov = "pytest --cov=packages --cov-report=term-missing {args:tests}"
+lint = "ruff check ."
+fmt = "ruff format ."
+typecheck = "mypy packages/"
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "packages/*/tests"]
+asyncio_mode = "auto"
+addopts = "-v --tb=short"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
