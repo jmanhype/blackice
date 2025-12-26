@@ -1,6 +1,0 @@
-# ShellCheck configuration for ACFS
-# https://github.com/koalaman/shellcheck/wiki/Directive
-
-# SC2015: Note that A && B || C is not if-then-else. C may run when A is true.
-# We use this pattern intentionally for error handling (e.g., cmd || true)
-disable=SC2015
